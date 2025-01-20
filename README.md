@@ -77,7 +77,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-MIT License - feel free to use and modify this script for your needs.
+[MIT License](LICENSE) - feel free to use and modify this script for your needs.
 
 ## Credits
 
