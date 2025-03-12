@@ -1,15 +1,15 @@
 #!/bin/bash
 
 # Script version
-VERSION="1.0.0"
+SCRIPT_VERSION="1.1.0"
 
 # Set error handling
 set -euo pipefail
 IFS=$'\n\t'
 
 # Variables
-WINDSURF_VERSION="1.2.1"
-DOWNLOAD_URL="https://windsurf-stable.codeiumdata.com/linux-x64/stable/aa53e9df956d9bc7cb1835f8eaa47768ce0e5b44/Windsurf-linux-x64-${WINDSURF_VERSION}.tar.gz"
+WINDSURF_VERSION="1.4.6"
+DOWNLOAD_URL="https://windsurf-stable.codeiumdata.com/linux-x64/stable/724a915b3b4c73cea3d2c93fc85672d6aa3961e0/Windsurf-linux-x64-${WINDSURF_VERSION}.tar.gz"
 ICON_URL="https://codeium.com/logo/windsurf_teal_logo.svg"
 INSTALL_DIR="/opt/windsurf"
 BIN_DIR="/usr/local/bin"
@@ -39,7 +39,7 @@ error() {
 check_dependencies() {
     local missing_deps=()
     
-    for cmd in wget tar mkdir rm chmod gtk-update-icon-cache; do
+    for cmd in wget tar gtk-update-icon-cache; do
         if ! command -v "$cmd" >/dev/null 2>&1; then
             missing_deps+=("$cmd")
         fi
@@ -74,7 +74,7 @@ create_dirs() {
 # Print banner
 echo "
 ╭──────────────────────────────────────╮
-│     Windsurf IDE Installer $VERSION     │
+│     Windsurf IDE Installer $SCRIPT_VERSION     │
 │        For Linux x64 Systems         │
 ╰──────────────────────────────────────╯"
 

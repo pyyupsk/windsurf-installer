@@ -24,16 +24,11 @@ Most Linux distributions come with these tools pre-installed. If any are missing
 
 ## Installation
 
-1. Download the installation script:
+To install Windsurf, you can run these commands:
 
 ```bash
-wget https://raw.githubusercontent.com/pyyupsk/windsurf-installer/main/installer.sh
-```
+wget -qO- https://raw.githubusercontent.com/pyyupsk/windsurf-installer/main/scripts/installer.sh | bash
 
-2. Run the installer:
-
-```bash
-sh ./installer.sh
 ```
 
 The script will handle everything else automatically.
@@ -52,10 +47,7 @@ The installer will:
 To uninstall Windsurf, you can run these commands:
 
 ```bash
-sudo rm -rf /opt/windsurf
-sudo rm /usr/local/bin/windsurf
-sudo rm /usr/share/icons/hicolor/scalable/apps/windsurf.svg
-rm ~/.local/share/applications/windsurf.desktop
+wget -qO- https://raw.githubusercontent.com/pyyupsk/windsurf-installer/main/scripts/uninstall.sh | bash
 ```
 
 ## Troubleshooting

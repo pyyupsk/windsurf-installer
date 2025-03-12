@@ -1,10 +1,16 @@
 #!/bin/bash
 
 # Test script version
-VERSION="1.0.0"
+SCRIPT_VERSION="1.1.0"
 
 # Variables
-WINDSURF_VERSION="1.2.1"
+WINDSURF_VERSION="1.4.6"
+DOWNLOAD_URL="https://windsurf-stable.codeiumdata.com/linux-x64/stable/724a915b3b4c73cea3d2c93fc85672d6aa3961e0/Windsurf-linux-x64-${WINDSURF_VERSION}.tar.gz"
+ICON_URL="https://codeium.com/logo/windsurf_teal_logo.svg"
+INSTALL_DIR="/opt/windsurf"
+BIN_DIR="/usr/local/bin"
+ICONS_DIR="/usr/share/icons/hicolor/scalable/apps"
+APPLICATIONS_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/applications"
 
 # Colors for output
 RED='\033[0;31m'
@@ -34,7 +40,7 @@ log_info() {
 # Test functions
 test_dependencies() {
     log_info "Testing required dependencies..."
-    local deps=(wget tar mkdir rm chmod gtk-update-icon-cache)
+    local deps=(wget tar gtk-update-icon-cache)
     
     for dep in "${deps[@]}"; do
         if command -v "$dep" >/dev/null 2>&1; then
@@ -62,21 +68,36 @@ test_permissions() {
     else
         log_fail "User lacks sudo privileges"
     fi
+    
+    # Test if user is not root
+    if [ "$EUID" -ne 0 ]; then
+        log_pass "User is not running as root (as required)"
+    else
+        log_fail "User is running as root (installer requires non-root)"
+    fi
 }
 
 test_disk_space() {
     log_info "Testing available disk space..."
     
-    # Check for at least 500MB free in /opt
+    # Check for at least 500MB free in /opt and /usr/local
     local required_space=500000
-    local available_space
+    local available_space_opt
+    local available_space_usr
 
-    available_space=$(df /opt | awk 'NR==2 {print $4}')
+    available_space_opt=$(df /opt | awk 'NR==2 {print $4}')
+    available_space_usr=$(df /usr/local | awk 'NR==2 {print $4}')
     
-    if [ "$available_space" -gt "$required_space" ]; then
+    if [ "$available_space_opt" -gt "$required_space" ]; then
         log_pass "Sufficient disk space available in /opt"
     else
         log_fail "Insufficient disk space in /opt"
+    fi
+    
+    if [ "$available_space_usr" -gt "$required_space" ]; then
+        log_pass "Sufficient disk space available in /usr/local"
+    else
+        log_fail "Insufficient disk space in /usr/local"
     fi
 }
 
@@ -85,7 +106,8 @@ test_network() {
     
     # Test connection to download URLs
     local urls=(
-        "https://windsurf-stable.codeiumdata.com/linux-x64/stable/aa53e9df956d9bc7cb1835f8eaa47768ce0e5b44/Windsurf-linux-x64-${WINDSURF_VERSION}.tar.gz"
+        "${DOWNLOAD_URL}"
+        "${ICON_URL}"
         "https://codeium.com"
     )
     
@@ -98,22 +120,46 @@ test_network() {
     done
 }
 
+test_temp_directory() {
+    log_info "Testing temporary directory creation..."
+    
+    local temp_dir
+    temp_dir=$(mktemp -d)
+    
+    if [ -d "$temp_dir" ]; then
+        log_pass "Successfully created temporary directory"
+        
+        # Test write permissions in temp dir
+        if touch "$temp_dir/test_file" 2>/dev/null; then
+            log_pass "Can write to temporary directory"
+            rm "$temp_dir/test_file"
+        else
+            log_fail "Cannot write to temporary directory"
+        fi
+        
+        # Clean up
+        rmdir "$temp_dir"
+    else
+        log_fail "Failed to create temporary directory"
+    fi
+}
+
 test_installation() {
     log_info "Testing installation script..."
     
     # Test script existence
-    if [ -f "installer.sh" ]; then
+    if [ -f "scripts/installer.sh" ]; then
         log_pass "Installation script found"
         
         # Test script permissions
-        if [ -x installer.sh ]; then
+        if [ -x "scripts/installer.sh" ]; then
             log_pass "Installation script is executable"
         else
             log_fail "Installation script is not executable"
         fi
         
         # Test script syntax
-        if bash -n installer.sh; then
+        if bash -n scripts/installer.sh; then
             log_pass "Installation script syntax is valid"
         else
             log_fail "Installation script has syntax errors"
@@ -126,10 +172,10 @@ test_installation() {
 test_post_install() {
     log_info "Testing post-installation state..."
     local files=(
-        "/opt/windsurf"
-        "/usr/local/bin/windsurf"
-        "/usr/share/icons/hicolor/scalable/apps/windsurf.svg"
-        "${XDG_DATA_HOME:-$HOME/.local/share}/applications/windsurf.desktop"
+        "$INSTALL_DIR"
+        "$BIN_DIR/windsurf"
+        "$ICONS_DIR/windsurf.svg"
+        "$APPLICATIONS_DIR/windsurf.desktop"
     )
     
     for file in "${files[@]}"; do
@@ -146,12 +192,29 @@ test_post_install() {
     else
         log_fail "Windsurf command is not available in PATH"
     fi
+    
+    # Test desktop file validity
+    if [ -f "$APPLICATIONS_DIR/windsurf.desktop" ]; then
+        if grep -q "Exec=/usr/local/bin/windsurf" "$APPLICATIONS_DIR/windsurf.desktop" && 
+           grep -q "Icon=windsurf" "$APPLICATIONS_DIR/windsurf.desktop"; then
+            log_pass "Desktop file appears valid"
+        else
+            log_fail "Desktop file content is incorrect"
+        fi
+    fi
+    
+    # Test icon cache update
+    if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+        log_pass "Icon cache utility found"
+    else
+        log_fail "Icon cache utility missing"
+    fi
 }
 
 # Print banner
 echo "
 ╭──────────────────────────────────────╮
-│   Windsurf Installer Test v$VERSION     │
+│   Windsurf Installer Test v$SCRIPT_VERSION     │
 │        For Linux x64 Systems         │
 ╰──────────────────────────────────────╯"
 
@@ -160,6 +223,7 @@ test_dependencies
 test_permissions
 test_disk_space
 test_network
+test_temp_directory
 test_installation
 test_post_install
 
