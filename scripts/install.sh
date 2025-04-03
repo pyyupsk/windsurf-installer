@@ -254,12 +254,12 @@ create_desktop_integration() {
   log "Creating desktop integration..."
 
   # Find icon path
-  ICON_PATH="$INSTALL_DIR/resources/app/resources/linux/windsurf.png"
+  ICON_PATH="$INSTALL_DIR/resources/app/resources/linux/code.png"
 
   # If primary path doesn't exist, try to find icon using standard tools
   if [ ! -f "$ICON_PATH" ]; then
     # Try alternative paths with simple shell commands
-    for pattern in "windsurf.png" "icon.png" "*.png"; do
+    for pattern in "code.png" "icon.png" "*.png"; do
       # Try with find if available
       if command -v find &>/dev/null; then
         ICON_PATH=$(find "$INSTALL_DIR" -name "$pattern" | head -n 1)
