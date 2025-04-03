@@ -34,14 +34,15 @@ jobs:
         with:
           node-version: 22
           cache: "pnpm"
+          cache-dependency-path: www/pnpm-lock.yaml
 
       - name: Install dependencies
-        working-directory: ./www
         run: pnpm install --frozen-lockfile
+        working-directory: www
 
       - name: Build
-        working-directory: ./www
         run: pnpm run build
+        working-directory: www
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
