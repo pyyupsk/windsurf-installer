@@ -345,8 +345,74 @@ verify_installation() {
   return 0
 }
 
+# Function to uninstall Windsurf
+uninstall_windsurf() {
+  log "Uninstalling Windsurf IDE..."
+
+  # Remove installation directory
+  if [ -d "$INSTALL_DIR" ]; then
+    rm -rf "$INSTALL_DIR"
+    success "Removed installation directory: $INSTALL_DIR"
+  fi
+
+  # Remove binary symlink
+  if [ -L "$BIN_DIR/$APP_NAME" ]; then
+    rm "$BIN_DIR/$APP_NAME"
+    success "Removed binary symlink: $BIN_DIR/$APP_NAME"
+  fi
+
+  # Remove desktop file
+  if [ -f "$DESKTOP_FILE" ]; then
+    rm "$DESKTOP_FILE"
+    success "Removed desktop file: $DESKTOP_FILE"
+  fi
+
+  # Update desktop database if available
+  if command -v update-desktop-database &>/dev/null; then
+    update-desktop-database
+  fi
+
+  success "Windsurf IDE has been successfully uninstalled!"
+  exit 0
+}
+
+# Function to display usage information
+usage() {
+  echo "Usage: $0 [OPTION]"
+  echo "Options:"
+  echo "  --install    Install/Update Windsurf IDE (default)"
+  echo "  --uninstall  Remove Windsurf IDE installation"
+  echo "  --help       Display this help message"
+  exit 1
+}
+
 # Main installation flow
 main() {
+  # Parse command line arguments
+  case "$1" in
+  --install)
+    MODE="install"
+    ;;
+  --uninstall)
+    MODE="uninstall"
+    ;;
+  --help)
+    usage
+    ;;
+  "")
+    MODE="install"
+    ;;
+  *)
+    error "Unknown option: $1"
+    usage
+    ;;
+  esac
+
+  if [ "$MODE" = "uninstall" ]; then
+    check_root
+    uninstall_windsurf
+  fi
+
   echo "================================================================="
   echo "            Windsurf IDE Installer (Latest Version)              "
   echo "================================================================="
@@ -357,10 +423,10 @@ main() {
   check_for_updates
 
   # Ask for confirmation
-  read -p "This will install Windsurf IDE v$WINDSURF_VERSION to $INSTALL_DIR. Continue? [y/N] " -n 1 -r
+  read -p "This will ${MODE} Windsurf IDE v$WINDSURF_VERSION to $INSTALL_DIR. Continue? [y/N] " -n 1 -r
   echo
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    log "Installation cancelled by user"
+    log "Operation cancelled by user"
     exit 0
   fi
 
@@ -385,5 +451,5 @@ main() {
   echo "================================================================="
 }
 
-# Run the main function
-main
+# Run the main function with all arguments
+main "$@"
