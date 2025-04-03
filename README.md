@@ -26,7 +26,7 @@ Before running the script, ensure you have the following tools installed:
 **Option 1: Download the script directly:**
 
 ```bash
-wget https://raw.githubusercontent.com/pyyupsk/windsurf-installer/refs/heads/main/scripts/install.sh
+curl -LO https://raw.githubusercontent.com/pyyupsk/windsurf-installer/refs/heads/main/scripts/install.sh
 chmod +x install.sh
 ```
 
@@ -37,7 +37,13 @@ git clone https://github.com/pyyupsk/windsurf-installer
 cd windsurf-installer/scripts
 ```
 
-**2. Run the script:**
+**2. Make the script executable:**
+
+```bash
+chmod +x install.sh
+```
+
+**3. Run the script:**
 
 ### Install or Update
 
