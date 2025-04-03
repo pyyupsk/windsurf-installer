@@ -26,7 +26,7 @@ Before running the script, ensure you have the following tools installed:
 **Option 1: Download the script directly:**
 
 ```bash
-curl -LO https://raw.githubusercontent.com/pyyupsk/windsurf-installer/refs/heads/main/scripts/install.sh
+curl -LO https://pyyupsk.github.io/windsurf-installer/install.sh
 chmod +x install.sh
 ```
 

@@ -21,7 +21,7 @@
               <span class="text-zinc-400"># Download the installer script</span>
               <div class="mt-1">
                 <span class="text-blue-400">curl</span> -LO
-                https://raw.githubusercontent.com/pyyupsk/windsurf-installer/refs/heads/main/scripts/install.sh
+                https://pyyupsk.github.io/windsurf-installer/install.sh
               </div>
             </div>
           </div>
