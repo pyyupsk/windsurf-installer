@@ -18,37 +18,10 @@ Make sure the following tools are installed before running the script:
 
 ## 💻 Usage
 
-### 🔹 Quick Install / Uninstall
-
-**Install / Update:**
+Install Windsurf IDE:
 
 ```bash
-curl -fsSL https://pyyupsk.github.io/windsurf-installer/install.sh | sudo bash
-```
-
-### 🔸 Manual Installation
-
-**1. Download the script:**
-
-Option 1: Direct download
-
-```bash
-curl -LO https://pyyupsk.github.io/windsurf-installer/install.sh
-chmod +x install.sh
-```
-
-Option 2: Clone the repo
-
-```bash
-git clone https://github.com/pyyupsk/windsurf-installer
-cd windsurf-installer/scripts
-chmod +x install.sh
-```
-
-**2. Run the script:**
-
-```bash
-sudo ./install.sh
+curl -fsSL https://pyyupsk.is-a.dev/windsurf | sudo bash
 ```
 
 ## 🔄 Installation Flow
@@ -65,16 +38,8 @@ sudo ./install.sh
 
 To completely remove Windsurf IDE:
 
-**One-liner:**
-
 ```bash
-curl -fsSL https://pyyupsk.github.io/windsurf-installer/install.sh | sudo bash -s -- --uninstall
-```
-
-**Manual:**
-
-```bash
-sudo ./install.sh --uninstall
+curl -fsSL https://pyyupsk.is-a.dev/windsurf | sudo bash -s -- --uninstall
 ```
 
 This will delete:
