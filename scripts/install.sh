@@ -16,24 +16,24 @@ BIN_DIR="/usr/local/bin"
 APP_NAME="windsurf"
 DESKTOP_FILE="/usr/share/applications/windsurf.desktop"
 
-# Function to display message with timestamp
+# Function to display log message
 log() {
-  echo -e "${BLUE}[$(date '+%Y-%m-%d %H:%M:%S')]${NC} $1"
+  echo -e "${BLUE}[+]${NC} $1"
 }
 
 # Function to display error message
 error() {
-  echo -e "${RED}[ERROR]${NC} $1"
+  echo -e "${RED}[-]${NC} $1"
 }
 
 # Function to display success message
 success() {
-  echo -e "${GREEN}[SUCCESS]${NC} $1"
+  echo -e "${GREEN}[✓]${NC} $1"
 }
 
 # Function to display warning message
 warning() {
-  echo -e "${YELLOW}[WARNING]${NC} $1"
+  echo -e "${YELLOW}[!]${NC} $1"
 }
 
 # Check if running as root and re-execute with sudo
