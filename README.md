@@ -14,7 +14,6 @@ A simple Bash script to **install**, **update**, or **uninstall** the **Windsurf
 Make sure the following tools are installed before running the script:
 
 - Core utilities: `curl`, `tar`, `grep`, `sed`, `mktemp`, `basename`, `dirname`, `cut`
-- Optional: `sha256sum` (recommended for checksum verification)
 - 🔑 **Root privileges** required for install/uninstall
 
 ## 💻 Usage
