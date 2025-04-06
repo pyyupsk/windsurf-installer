@@ -310,7 +310,7 @@ create_desktop_integration() {
     rm "$BIN_DIR/$APP_NAME"
   fi
 
-  ln -s "$INSTALL_DIR/windsurf" "$BIN_DIR/$APP_NAME"
+  ln -s "$INSTALL_DIR/bin/windsurf" "$BIN_DIR/$APP_NAME"
 
   mkdir -p "$(dirname "$DESKTOP_FILE")"
 
