@@ -1,120 +1,114 @@
-# Windsurf Installer 🚀
+# 🌊 Windsurf Installer
 
-A simple Bash script to **install**, **update**, and **uninstall** the **Windsurf IDE** on Linux.
+A simple Bash script to **install**, **update**, or **uninstall** the **Windsurf IDE** on Linux.
 
-**Before you begin, you must download the script or clone the repository to your local machine.**
+## ✨ Features
 
-## Features 🎉
+- 🚀 Install or update the **latest version** of Windsurf IDE
+- 🔐 Verifies downloads using **SHA256 checksums**
+- 🖥️ Automatically creates desktop integration (icon + launcher)
+- 📋 Clean and informative logs: success ✅, errors ❌, and warnings ⚠️
 
-- Install or update the latest version of Windsurf IDE.
-- Verify downloads with SHA256 checksum for security.
-- Auto-create desktop integration for easy access.
-- Minimal and clear logs for success, errors, and warnings.
+## 🔧 Requirements
 
-## Requirements 🛠️
+Make sure the following tools are installed before running the script:
 
-Before running the script, ensure you have the following tools installed:
+- Core utilities: `curl`, `tar`, `grep`, `sed`, `mktemp`, `basename`, `dirname`, `cut`
+- Optional: `sha256sum` (recommended for checksum verification)
+- 🔑 **Root privileges** required for install/uninstall
 
-- `curl`, `tar`, `grep`, `sed`, `mktemp`, `basename`, `dirname`, `cut`
-- Optional: `sha256sum` (for checksum verification)
-- Root privileges are required to install/uninstall.
+## 💻 Usage
 
-## Usage 💻
+### 🔹 Quick Install / Uninstall
 
-**1. Download the script or clone the repository:**
+**Install / Update:**
 
-**Option 1: Download the script directly:**
+```bash
+curl -fsSL https://pyyupsk.github.io/windsurf-installer/install.sh | sudo bash
+```
+
+### 🔸 Manual Installation
+
+**1. Download the script:**
+
+Option 1: Direct download
 
 ```bash
 curl -LO https://pyyupsk.github.io/windsurf-installer/install.sh
 chmod +x install.sh
 ```
 
-**Option 2: Clone the repository (if applicable):**
+Option 2: Clone the repo
 
 ```bash
 git clone https://github.com/pyyupsk/windsurf-installer
 cd windsurf-installer/scripts
-```
-
-**2. Make the script executable:**
-
-```bash
 chmod +x install.sh
 ```
 
-**3. Run the script:**
-
-### Install or Update
-
-To install or update Windsurf IDE:
+**2. Run the script:**
 
 ```bash
 sudo ./install.sh
 ```
 
-### Uninstall
+## 🔄 Installation Flow
 
-To remove the Windsurf IDE:
+1. Fetches the latest Windsurf IDE version from the official API
+2. Checks for updates if already installed
+3. Downloads and verifies the `.tar.gz` archive (SHA256)
+4. Extracts and installs to `/opt/windsurf`
+5. Creates:
+   - A symlink in `/usr/local/bin`
+   - A desktop entry for GUI access
+
+## 🧹 Uninstallation
+
+To completely remove Windsurf IDE:
+
+**One-liner:**
+
+```bash
+curl -fsSL https://pyyupsk.github.io/windsurf-installer/install.sh | sudo bash -s -- --uninstall
+```
+
+**Manual:**
 
 ```bash
 sudo ./install.sh --uninstall
 ```
 
-### Help
+This will delete:
 
-To view usage information:
+- `/opt/windsurf`
+- `/usr/local/bin/windsurf`
+- `/usr/share/applications/windsurf.desktop`
 
-```bash
-./install.sh --help
-```
+## 🛠️ Troubleshooting
 
-## Installation Flow 🔄
+| Issue                            | Solution                                                                                                      |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| **Missing dependencies**         | Script will notify you. Install missing tools with your package manager (e.g., `apt`, `dnf`, `yum`, `pacman`) |
+| **Checksum verification failed** | Retry after checking your internet connection                                                                 |
+| **Desktop entry missing**        | Ensure `update-desktop-database` is installed or check installation dir manually                              |
+| **Permission errors**            | Run the script with `sudo` for elevated privileges                                                            |
 
-1. The script fetches the latest version of Windsurf IDE from the official API.
-2. It checks if any updates are needed for your existing installation.
-3. The script downloads the `.tar.gz` archive and verifies the checksum.
-4. It extracts the files and installs them to `/opt/windsurf`.
-5. The script creates a symbolic link and desktop entry for easy access.
+## 🤝 Contributing
 
-## Uninstallation 🧹
+We welcome contributions!
 
-To remove the IDE completely, run:
+1. Fork the repo
+2. Create a feature branch
+3. Make your changes
+4. Open a pull request with a clear description
 
-```bash
-sudo ./install.sh --uninstall
-```
+> Please follow existing code style and keep your changes focused.
 
-This will remove:
+## 💖 Credits
 
-- The installation directory (`/opt/windsurf`).
-- The symlink (`/usr/local/bin/windsurf`).
-- The desktop entry (`/usr/share/applications/windsurf.desktop`).
+- Windsurf IDE is developed by [**Codeium**](https://codeium.com).
+- This installer is **unofficial** and created by [**@pyyupsk**](https://github.com/pyyupsk) to streamline Linux installation and management.
 
-## Troubleshooting 🛠️
+## ⚠️ Disclaimer
 
-- **Missing dependencies**: If the script can't find required tools, it will notify you. Install them using your package manager (e.g., `apt`, `yum`, `dnf`).
-- **Checksum verification failure**: If the downloaded file doesn't match the expected checksum, the installation will fail to protect against corrupted files. Ensure a stable internet connection and retry.
-
-- **Desktop entry not created**: If the script fails to create a desktop entry, it will fall back to a generic icon. Make sure you have `update-desktop-database` installed, or manually check the installation directory for the desktop entry.
-
-- **Permissions issues**: The script needs root privileges for installation and uninstallation. If you encounter permission errors, ensure you're running the script with `sudo`.
-
-## Contributing 🤝
-
-Contributions are welcome! If you find any bugs or have ideas for improvements, feel free to:
-
-1. Fork the repository.
-2. Create a new branch.
-3. Make your changes.
-4. Open a pull request with a description of what you've done.
-
-Please ensure that your code follows the style and conventions used in the project.
-
-## Credits 💖
-
-- **[Codeium](https://codeium.com)** is the developer of **Windsurf IDE**. This script is **unofficial** and created by **[pyyupsk](https://github.com/pyyupsk)** to simplify the installation and management of Windsurf IDE on Linux.
-
-## Disclaimer ⚠️
-
-This script is provided "as is", without warranty of any kind, either express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, or non-infringement. In no event shall the authors or copyright holders be liable for any claim, damages, or other liability, whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the software or the use or other dealings in the software. Always back up your data before running scripts on your system.
+This script is provided **"as is"**, without any warranties—express or implied. Use it at your own risk. Always back up your system before running installation scripts.
