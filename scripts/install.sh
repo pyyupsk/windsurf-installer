@@ -168,7 +168,7 @@ download_windsurf() {
   if command -v sha256sum &>/dev/null; then
     log "Verifying download integrity..."
     local computed_sha256
-    computed_sha256=$(sha256sum "$download_file" | cut -d' ' -f1)
+    computed_sha256=$(openssl dgst -sha256 "$download_file" | awk '{print $2}')
 
     if [ "$computed_sha256" != "$SHA256" ]; then
       error "Checksum verification failed"
