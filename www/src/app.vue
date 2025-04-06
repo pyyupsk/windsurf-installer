@@ -1,97 +1,103 @@
+<script setup lang="ts">
+import { useClipboard } from "@vueuse/core";
+import { ArrowRight, Check, Copy, X } from "lucide-vue-next";
+import { ref } from "vue";
+import { buttonVariants } from "./components/ui/button";
+
+const { copy, copied } = useClipboard();
+
+const showBanner = ref<boolean>(true);
+</script>
+
 <template>
-  <div class="bg-zinc-900 text-zinc-100">
-    <main
-      class="container mx-auto p-4 min-h-screen flex flex-col items-center justify-center"
-    >
-      <!-- Header -->
-      <section class="flex flex-col items-center">
-        <h1 class="text-4xl font-bold mb-4">Windsurf Installer</h1>
-        <p class="text-lg text-zinc-400">
-          A simple Bash script to install, update, and uninstall the Windsurf
-          IDE on Linux
+  <div class="flex h-screen flex-col overflow-auto">
+    <!-- Top Banner -->
+    <div v-if="showBanner" class="bg-gradient-to-r from-[#076c60] to-[#00a591] text-white">
+      <div class="relative container flex h-9 items-center justify-center">
+        <p class="text-sm font-medium">
+          This is an unofficial community installer.
+          <a href="#disclaimer" class="ml-1 inline-flex items-center underline">
+            Read disclaimer <ArrowRight class="ml-1 h-3 w-3" />
+          </a>
         </p>
-      </section>
+        <button
+          @click="showBanner = false"
+          class="transforms absolute top-1/2 right-4 -translate-y-1/2"
+        >
+          <X class="h-4 w-4" />
+        </button>
+      </div>
+    </div>
 
-      <!-- Installation Steps -->
-      <section class="flex flex-col mt-8 w-full max-w-4xl space-y-4">
-        <div class="bg-zinc-800 rounded-lg p-4 font-mono">
-          <div class="flex items-start">
-            <span class="text-green-400 mr-2">$</span>
-            <div class="flex-1">
-              <span class="text-zinc-400"># Download the installer script</span>
-              <div class="mt-1">
-                <span class="text-blue-400">curl</span> -LO
-                https://pyyupsk.github.io/windsurf-installer/install.sh
-              </div>
-            </div>
-          </div>
+    <!-- Hero -->
+    <div class="flex-1 py-20">
+      <div class="container flex flex-col items-center justify-center gap-8">
+        <img src="/windsurf.svg" alt="Windsurf Logo" class="mx-auto h-14 w-14" />
+        <h1 class="text-6xl font-semibold tracking-tight">
+          Windsurf IDE installer for <span class="font-serif">linux</span>
+        </h1>
+        <p class="max-w-5xl text-center text-2xl leading-8 tracking-tight">
+          A simple Bash script to install, update, or uninstall the Windsurf IDE on Linux. Created
+          by the
+          <a
+            href="https://github.com/pyyupsk"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-primary underline-offset-8 hover:underline"
+            >@pyyupsk</a
+          >
+          to streamline Linux installation and management.
+        </p>
+
+        <div class="bg-card group relative mt-8 rounded-md px-8 py-4">
+          <code class="overflow-x-auto whitespace-nowrap">
+            <span class="text-primary">curl</span> -fsSL
+            <span class="text-muted-foreground">https://pyyupsk.is-a.dev/windsurf</span> |
+            <span class="text-primary">sudo</span> bash
+          </code>
+
+          <button
+            :class="[
+              'absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer opacity-0 transition-opacity',
+              copied ? 'opacity-100' : 'group-hover:opacity-100',
+            ]"
+            @click="copy('curl -fsSL https://pyyupsk.is-a.dev/windsurf | sudo bash')"
+          >
+            <Copy
+              :class="[
+                'transforms absolute top-1/2 left-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 transition-all',
+                copied ? 'scale-0 opacity-0' : 'scale-100 opacity-100',
+              ]"
+            />
+            <Check
+              :class="[
+                'transforms absolute top-1/2 left-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 transition-all',
+                copied ? 'scale-100 opacity-100' : 'scale-0 opacity-0',
+              ]"
+            />
+          </button>
         </div>
 
-        <div class="bg-zinc-800 rounded-lg p-4 font-mono">
-          <div class="flex items-start">
-            <span class="text-green-400 mr-2">$</span>
-            <div class="flex-1">
-              <span class="text-zinc-400"># Make the script executable</span>
-              <div class="mt-1">
-                <span class="text-blue-400">chmod</span> +x install.sh
-              </div>
-            </div>
-          </div>
+        <div class="mt-4 flex flex-col gap-4">
+          <a :class="buttonVariants({ size: 'lg', class: 'px-12' })" href="#usage">
+            Installation Flow
+          </a>
+          <a
+            class="text-muted-foreground text-center text-sm"
+            href="https://pyyupsk.is-a.dev/windsurf"
+            target="_blank"
+          >
+            View script source
+          </a>
         </div>
 
-        <div class="bg-zinc-800 rounded-lg p-4 font-mono">
-          <div class="flex items-start">
-            <span class="text-green-400 mr-2">$</span>
-            <div class="flex-1">
-              <span class="text-zinc-400"># Run the installer</span>
-              <div class="mt-1">
-                <span class="text-blue-400">sudo</span> ./install.sh
-              </div>
-            </div>
-          </div>
+        <div class="border-muted-foreground/10 relative mt-8 overflow-hidden rounded-lg border-2">
+          <img
+            src="https://exafunction.github.io/public/images/windsurf/windsurf-ide-thumbnail.jpg"
+            alt="Windsurf IDE Screenshot"
+          />
         </div>
-      </section>
-
-      <!-- Features Grid -->
-      <section class="mt-8 w-full max-w-4xl">
-        <h2 class="text-2xl font-semibold mb-6">Features</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div class="bg-zinc-800 p-6 rounded-lg">
-            <div class="text-4xl mb-3">🚀</div>
-            <h3 class="text-xl font-semibold mb-2">Quick Installation</h3>
-            <p class="text-zinc-400">Simple one-command installation process</p>
-          </div>
-          <div class="bg-zinc-800 p-6 rounded-lg">
-            <div class="text-4xl mb-3">🔄</div>
-            <h3 class="text-xl font-semibold mb-2">Easy Updates</h3>
-            <p class="text-zinc-400">
-              Keep your IDE up-to-date with a single command
-            </p>
-          </div>
-          <div class="bg-zinc-800 p-6 rounded-lg">
-            <div class="text-4xl mb-3">🧹</div>
-            <h3 class="text-xl font-semibold mb-2">Clean Uninstall</h3>
-            <p class="text-zinc-400">Remove all components completely</p>
-          </div>
-          <div class="bg-zinc-800 p-6 rounded-lg">
-            <div class="text-4xl mb-3">🔒</div>
-            <h3 class="text-xl font-semibold mb-2">Secure</h3>
-            <p class="text-zinc-400">Verified and safe installation process</p>
-          </div>
-          <div class="bg-zinc-800 p-6 rounded-lg">
-            <div class="text-4xl mb-3">💻</div>
-            <h3 class="text-xl font-semibold mb-2">Linux Support</h3>
-            <p class="text-zinc-400">
-              Compatible with major Linux distributions
-            </p>
-          </div>
-          <div class="bg-zinc-800 p-6 rounded-lg">
-            <div class="text-4xl mb-3">⚡</div>
-            <h3 class="text-xl font-semibold mb-2">Fast</h3>
-            <p class="text-zinc-400">Optimized for quick setup and operation</p>
-          </div>
-        </div>
-      </section>
-    </main>
+      </div>
+    </div>
   </div>
 </template>
