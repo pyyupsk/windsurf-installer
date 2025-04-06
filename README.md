@@ -2,6 +2,8 @@
 
 A simple Bash script to **install**, **update**, or **uninstall** the **Windsurf IDE** on Linux.
 
+![Windsurf IDE](https://exafunction.github.io/public/images/windsurf/windsurf-ide-thumbnail.jpg)
+
 ## ✨ Features
 
 - 🚀 Install or update the **latest version** of Windsurf IDE
@@ -23,6 +25,8 @@ Install Windsurf IDE:
 ```bash
 curl -fsSL https://pyyupsk.is-a.dev/windsurf | sudo bash
 ```
+
+View the [install script](https://pyyupsk.is-a.dev/windsurf) for more details.
 
 ## 🔄 Installation Flow
 
@@ -75,4 +79,8 @@ We welcome contributions!
 
 ## ⚠️ Disclaimer
 
-This script is provided **"as is"**, without any warranties—express or implied. Use it at your own risk. Always back up your system before running installation scripts.
+**This installation script for Windsurf IDE is not officially associated with, endorsed by, or affiliated with Codeium (https://codeium.com), the original developers of Windsurf IDE.** This script is provided as an independent, third-party tool to facilitate installation of the software.
+
+The script is provided **"as is" without warranty of any kind**, either expressed or implied, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose. **The entire risk as to the quality and performance of the script is with you.**
+
+By using this installation script, you acknowledge that you are using an **unofficial installation method** and accept all associated risks. Please visit https://codeium.com for official downloads and installation methods.
