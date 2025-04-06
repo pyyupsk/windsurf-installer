@@ -36,10 +36,23 @@ warning() {
   echo -e "${YELLOW}[WARNING]${NC} $1"
 }
 
-# Check if running as root
+# Check if running as root and re-execute with sudo
 check_root() {
   if [ "$EUID" -ne 0 ]; then
-    error "This script must be run as root"
+
+    # If being piped, need to save to temp file first
+    if [ ! -t 0 ]; then
+      TEMP_SCRIPT=$(mktemp)
+      cat >"$TEMP_SCRIPT"
+      chmod +x "$TEMP_SCRIPT"
+      echo "Running with sudo. You may be prompted for your password..."
+      exec sudo bash "$TEMP_SCRIPT" "$@"
+    else
+      # Terminal attached, just re-execute with sudo
+      exec sudo "$0" "$@"
+    fi
+
+    error "Failed to obtain root privileges"
     exit 1
   fi
 }
@@ -118,11 +131,14 @@ check_for_updates() {
 
       if [ "$CURRENT_VERSION" = "$WINDSURF_VERSION" ]; then
         log "You already have the latest version installed"
-        read -p "Do you want to reinstall anyway? [y/N] " -n 1 -r
-        echo
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-          log "Installation cancelled"
-          exit 0
+
+        if [ -t 0 ]; then
+          read -p "Do you want to reinstall anyway? [y/N] " -n 1 -r
+          echo
+          if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            log "Installation cancelled"
+            exit 0
+          fi
         fi
       fi
     else
@@ -386,6 +402,14 @@ usage() {
   exit 1
 }
 
+# A recommended one-liner installer message
+show_one_liner_tip() {
+  echo
+  echo "TIP: Next time you can install or update using this one-liner:"
+  echo "     curl -fsSL https://pyyupsk.github.io/windsurf-installer/install.sh | sudo bash"
+  echo
+}
+
 # Main installation flow
 main() {
   # Parse command line arguments
@@ -408,8 +432,10 @@ main() {
     ;;
   esac
 
+  # Check for root privileges and re-execute with sudo
+  check_root "$@"
+
   if [ "$MODE" = "uninstall" ]; then
-    check_root
     uninstall_windsurf
   fi
 
@@ -417,17 +443,22 @@ main() {
   echo "            Windsurf IDE Installer (Latest Version)              "
   echo "================================================================="
 
-  check_root
   check_dependencies
   get_latest_info
   check_for_updates
 
   # Ask for confirmation
-  read -p "This will ${MODE} Windsurf IDE v$WINDSURF_VERSION to $INSTALL_DIR. Continue? [y/N] " -n 1 -r
-  echo
-  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    log "Operation cancelled by user"
-    exit 0
+  if [ -t 0 ]; then
+    # Interactive terminal available
+    read -p "This will ${MODE} Windsurf IDE v$WINDSURF_VERSION to $INSTALL_DIR. Continue? [y/N] " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+      log "Operation cancelled by user"
+      exit 0
+    fi
+  else
+    # Non-interactive, assume yes
+    log "Non-interactive mode detected, assuming yes for confirmation"
   fi
 
   # Declare global variables to store paths
@@ -447,6 +478,11 @@ main() {
   create_version_file
   create_desktop_integration
   verify_installation
+
+  # Show one-liner tip if not already using it
+  if [ -t 1 ]; then
+    show_one_liner_tip
+  fi
 
   echo "================================================================="
 }
