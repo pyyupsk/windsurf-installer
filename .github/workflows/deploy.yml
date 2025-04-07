@@ -27,24 +27,24 @@ jobs:
       - name: Copy install script
         run: cp scripts/install.sh www/public/install.sh
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: 10
+          bun-version: latest
 
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "pnpm"
-          cache-dependency-path: www/pnpm-lock.yaml
+          cache: "bun"
+          cache-dependency-path: www/bun.lock
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
         working-directory: www
 
       - name: Build
-        run: pnpm run build
+        run: bun run build
         working-directory: www
 
       - name: Setup Pages
