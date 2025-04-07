@@ -49,8 +49,9 @@ const features = [
           target="_blank"
           rel="noopener noreferrer"
           class="text-primary underline-offset-8 hover:underline"
-          >@pyyupsk</a
         >
+          @pyyupsk
+        </a>
         to streamline Linux installation and management.
       </p>
 
@@ -128,7 +129,7 @@ const features = [
           <p class="text-xl">
             <strong class="font-serif">
               This installation script for Windsurf IDE is not officially associated with, endorsed
-              by, or affiliated with Codeium (https://codeium.com), the original developers of
+              by, or affiliated with Windsurf (https://windsurf.com/), the original developers of
               Windsurf IDE.
             </strong>
             This script is provided as an independent, third-party tool to facilitate installation
@@ -146,11 +147,48 @@ const features = [
           <p class="text-xl">
             By using this installation script, you acknowledge that you are using an
             <strong class="font-serif">unofficial installation method</strong> and accept all
-            associated risks. Please visit https://codeium.com for official downloads and
+            associated risks. Please visit https://windsurf.com/ for official downloads and
             installation methods.
           </p>
         </div>
       </AppCard>
+    </div>
+
+    <!-- Footer -->
+    <div class="border-t">
+      <div class="container flex items-center justify-between py-4">
+        <p class="text-muted-foreground text-sm">
+          Made with ❤️ by
+          <a
+            href="https://github.com/pyyupsk"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-primary underline-offset-4 hover:underline"
+          >
+            @pyyupsk
+          </a>
+        </p>
+
+        <div class="flex gap-4">
+          <a href="#app" class="text-muted-foreground text-sm"> Back to Top </a>
+          <a
+            href="https://github.com/pyyupsk/windsurf-installer"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-muted-foreground text-sm"
+          >
+            GitHub
+          </a>
+          <a
+            href="https://windsurf.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-muted-foreground text-sm"
+          >
+            Windsurf
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
