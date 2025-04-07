@@ -5,7 +5,7 @@ import AppSnippet from "./components/AppSnippet.vue";
 </script>
 
 <template>
-  <div class="flex h-screen flex-col overflow-auto">
+  <div class="flex h-screen flex-col">
     <!-- Top Banner -->
     <AppBanner />
 
@@ -36,7 +36,10 @@ import AppSnippet from "./components/AppSnippet.vue";
         </AppSnippet>
 
         <div class="mt-4 flex flex-col gap-4">
-          <a :class="buttonVariants({ size: 'lg', class: 'px-12' })" href="#usage">
+          <a
+            :class="buttonVariants({ size: 'lg', class: 'shadow-primary/20 px-12 !shadow-xl' })"
+            href="#usage"
+          >
             Installation Flow
           </a>
           <a
@@ -48,11 +51,15 @@ import AppSnippet from "./components/AppSnippet.vue";
           </a>
         </div>
 
-        <div class="border-muted-foreground/10 relative mt-8 overflow-hidden rounded-lg border-2">
-          <img
-            src="https://exafunction.github.io/public/images/windsurf/windsurf-ide-thumbnail.jpg"
-            alt="Windsurf IDE Screenshot"
-          />
+        <div
+          class="overflow-hidden rounded-lg bg-[radial-gradient(ellipse_at_center,_#ffffff0d_85%,_#09B6A240)] p-0.5"
+        >
+          <div class="bg-card relative overflow-hidden rounded-lg">
+            <img
+              src="https://exafunction.github.io/public/images/windsurf/windsurf-ide-thumbnail.jpg"
+              alt="Windsurf IDE Screenshot"
+            />
+          </div>
         </div>
       </div>
     </div>

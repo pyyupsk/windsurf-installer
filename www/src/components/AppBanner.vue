@@ -13,4 +13,7 @@ import { ArrowRight } from "lucide-vue-next";
       </p>
     </div>
   </div>
+  <div
+    class="from-background/95 pointer-events-none fixed top-9 z-40 h-24 w-full bg-gradient-to-b to-transparent"
+  />
 </template>
