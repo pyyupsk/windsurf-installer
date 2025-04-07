@@ -318,7 +318,7 @@ create_desktop_integration() {
   cat >"$DESKTOP_FILE" <<EOF
 [Desktop Entry]
 Name=Windsurf IDE
-Comment=Universal Code Editor by Codeium
+Comment=The first agentic IDE, and then some.
 GenericName=Text Editor
 Exec=$INSTALL_DIR/windsurf %F
 Icon=$ICON_PATH

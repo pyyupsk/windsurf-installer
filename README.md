@@ -74,13 +74,13 @@ We welcome contributions!
 
 ## 💖 Credits
 
-- Windsurf IDE is developed by [**Codeium**](https://codeium.com).
+- Windsurf IDE is developed by [**Windsurf**](https://windsurf.com).
 - This installer is **unofficial** and created by [**@pyyupsk**](https://github.com/pyyupsk) to streamline Linux installation and management.
 
 ## ⚠️ Disclaimer
 
-**This installation script for Windsurf IDE is not officially associated with, endorsed by, or affiliated with Codeium (https://codeium.com), the original developers of Windsurf IDE.** This script is provided as an independent, third-party tool to facilitate installation of the software.
+**This installation script for Windsurf IDE is not officially associated with, endorsed by, or affiliated with Windsurf (https://windsurf.com), the original developers of Windsurf IDE.** This script is provided as an independent, third-party tool to facilitate installation of the software.
 
 The script is provided **"as is" without warranty of any kind**, either expressed or implied, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose. **The entire risk as to the quality and performance of the script is with you.**
 
-By using this installation script, you acknowledge that you are using an **unofficial installation method** and accept all associated risks. Please visit https://codeium.com for official downloads and installation methods.
+By using this installation script, you acknowledge that you are using an **unofficial installation method** and accept all associated risks. Please visit https://windsurf.com for official downloads and installation methods.
