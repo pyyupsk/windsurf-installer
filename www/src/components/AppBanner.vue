@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-vue-next";
 </script>
 
 <template>
-  <div class="sticky top-0 z-50 bg-gradient-to-r from-[#076c60] to-[#00a591] text-white">
+  <div class="fixed top-0 z-50 w-full bg-gradient-to-r from-[#076c60] to-[#00a591] text-white">
     <div class="relative container flex h-9 items-center justify-center">
       <p class="text-sm font-medium">
         This is an unofficial community installer.

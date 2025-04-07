@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { buttonVariants } from "./components/ui/button";
-import { Check, Download, Terminal, Monitor } from "lucide-vue-next";
+import { Check, Download, Terminal, Monitor, Github } from "lucide-vue-next";
 import AppBanner from "./components/AppBanner.vue";
 import AppSnippet from "./components/AppSnippet.vue";
 import AppCard from "./components/AppCard.vue";
@@ -36,7 +36,7 @@ const features = [
     <AppBanner />
 
     <!-- Hero -->
-    <div class="container flex flex-col items-center justify-center gap-8 py-20">
+    <div class="container flex flex-col items-center justify-center gap-8 py-30">
       <img src="/windsurf.svg" alt="Windsurf Logo" class="mx-auto h-14 w-14" />
       <h1 class="text-6xl font-semibold tracking-tight">
         Windsurf IDE installer for <span class="font-serif">linux</span>
@@ -62,10 +62,18 @@ const features = [
 
       <div class="mt-4 flex flex-col gap-4">
         <a
-          :class="buttonVariants({ size: 'lg', class: 'shadow-primary/20 px-12 !shadow-xl' })"
-          href="#usage"
+          :class="
+            buttonVariants({
+              size: 'lg',
+              class: 'shadow-primary/20 border-2 border-white/25 !px-12 !shadow-xl',
+            })
+          "
+          href="https://github.com/pyyupsk/windsurf-installer"
+          target="_blank"
+          rel="noopener noreferrer"
         >
-          Installation Flow
+          <Github />
+          Star on GitHub
         </a>
         <a
           class="text-muted-foreground text-center text-sm"
@@ -110,6 +118,39 @@ const features = [
           </div>
         </AppCard>
       </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div id="disclaimer" class="container py-20">
+      <h2 class="text-center text-5xl font-semibold tracking-tight">Disclaimer</h2>
+      <AppCard class="mt-8">
+        <div class="flex flex-col gap-4 p-6">
+          <p class="text-xl">
+            <strong class="font-serif">
+              This installation script for Windsurf IDE is not officially associated with, endorsed
+              by, or affiliated with Codeium (https://codeium.com), the original developers of
+              Windsurf IDE.
+            </strong>
+            This script is provided as an independent, third-party tool to facilitate installation
+            of the software.
+          </p>
+          <p class="text-xl">
+            The script is provided
+            <strong class="font-serif">"as is" without warranty of any kind</strong>, either
+            expressed or implied, including, but not limited to, the implied warranties of
+            merchantability and fitness for a particular purpose.
+            <strong class="font-serif">
+              The entire risk as to the quality and performance of the script is with you.
+            </strong>
+          </p>
+          <p class="text-xl">
+            By using this installation script, you acknowledge that you are using an
+            <strong class="font-serif">unofficial installation method</strong> and accept all
+            associated risks. Please visit https://codeium.com for official downloads and
+            installation methods.
+          </p>
+        </div>
+      </AppCard>
     </div>
   </div>
 </template>
