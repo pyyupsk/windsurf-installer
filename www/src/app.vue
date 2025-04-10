@@ -55,9 +55,9 @@ const features = [
         to streamline Linux installation and management.
       </p>
 
-      <AppSnippet code="curl -fsSL https://pyyupsk.is-a.dev/windsurf | sudo bash">
+      <AppSnippet code="curl -fsSL https://fasu.dev/windsurf | sudo bash">
         <span class="text-primary">curl</span> -fsSL
-        <span class="text-muted-foreground">https://pyyupsk.is-a.dev/windsurf</span> |
+        <span class="text-muted-foreground">https://fasu.dev/windsurf</span> |
         <span class="text-primary">sudo</span> bash
       </AppSnippet>
 
@@ -78,7 +78,7 @@ const features = [
         </a>
         <a
           class="text-muted-foreground text-center text-sm"
-          href="https://pyyupsk.is-a.dev/windsurf"
+          href="https://fasu.dev/windsurf"
           target="_blank"
         >
           View script source

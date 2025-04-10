@@ -23,10 +23,10 @@ Make sure the following tools are installed before running the script:
 Install Windsurf IDE:
 
 ```bash
-curl -fsSL https://pyyupsk.is-a.dev/windsurf | sudo bash
+curl -fsSL https://fasu.dev/windsurf | sudo bash
 ```
 
-View the [install script](https://pyyupsk.is-a.dev/windsurf) for more details.
+View the [install script](https://fasu.dev/windsurf) for more details.
 
 ## 🔄 Installation Flow
 
@@ -43,7 +43,7 @@ View the [install script](https://pyyupsk.is-a.dev/windsurf) for more details.
 To completely remove Windsurf IDE:
 
 ```bash
-curl -fsSL https://pyyupsk.is-a.dev/windsurf | sudo bash -s -- --uninstall
+curl -fsSL https://fasu.dev/windsurf | sudo bash -s -- --uninstall
 ```
 
 This will delete:

@@ -406,7 +406,7 @@ usage() {
 show_one_liner_tip() {
   echo
   echo "TIP: Next time you can install or update using this one-liner:"
-  echo "     curl -fsSL https://pyyupsk.is-a.dev/windsurf | sudo bash"
+  echo "     curl -fsSL https://fasu.dev/windsurf | sudo bash"
   echo
 }
 
