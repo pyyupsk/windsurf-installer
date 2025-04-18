@@ -1,5 +1,3 @@
 {
-    "recommendations": [
-        "timonwong.shellcheck"
-    ]
+  "recommendations": ["timonwong.shellcheck"]
 }
