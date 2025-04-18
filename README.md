@@ -33,9 +33,9 @@ View the [install script](https://fasu.dev/windsurf) for more details.
 1. Fetches the latest Windsurf IDE version from the official API
 2. Checks for updates if already installed
 3. Downloads and verifies the `.tar.gz` archive (SHA256)
-4. Extracts and installs to `/opt/windsurf`
+4. Extracts and installs to `~/.local/opt/windsurf`
 5. Creates:
-   - A symlink in `/usr/local/bin`
+   - A symlink in `~/.local/bin`
    - A desktop entry for GUI access
 
 ## 🧹 Uninstallation
@@ -48,9 +48,9 @@ curl -fsSL https://fasu.dev/windsurf | bash -s -- --uninstall
 
 This will delete:
 
-- `/opt/windsurf`
-- `/usr/local/bin/windsurf`
-- `/usr/share/applications/windsurf.desktop`
+- `~/.local/opt/windsurf`
+- `~/.local/bin/windsurf`
+- `~/.local/share/applications/windsurf.desktop`
 
 ## 🛠️ Troubleshooting
 
