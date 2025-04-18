@@ -23,7 +23,7 @@ Make sure the following tools are installed before running the script:
 Install Windsurf IDE:
 
 ```bash
-curl -fsSL https://fasu.dev/windsurf | sudo bash
+curl -fsSL https://fasu.dev/windsurf | bash
 ```
 
 View the [install script](https://fasu.dev/windsurf) for more details.
@@ -43,7 +43,7 @@ View the [install script](https://fasu.dev/windsurf) for more details.
 To completely remove Windsurf IDE:
 
 ```bash
-curl -fsSL https://fasu.dev/windsurf | sudo bash -s -- --uninstall
+curl -fsSL https://fasu.dev/windsurf | bash -s -- --uninstall
 ```
 
 This will delete:
@@ -59,7 +59,6 @@ This will delete:
 | **Missing dependencies**         | Script will notify you. Install missing tools with your package manager (e.g., `apt`, `dnf`, `yum`, `pacman`) |
 | **Checksum verification failed** | Retry after checking your internet connection                                                                 |
 | **Desktop entry missing**        | Ensure `update-desktop-database` is installed or check installation dir manually                              |
-| **Permission errors**            | Run the script with `sudo` for elevated privileges                                                            |
 
 ## 🤝 Contributing
 

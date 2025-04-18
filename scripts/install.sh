@@ -11,10 +11,10 @@ NC='\033[0m' # No Color
 
 # API endpoint for getting latest version information
 API_URL="https://windsurf-stable.codeium.com/api/update/linux-x64/stable/latest"
-INSTALL_DIR="/opt/windsurf"
-BIN_DIR="/usr/local/bin"
+INSTALL_DIR="$HOME/.local/opt/windsurf"
+BIN_DIR="$HOME/.local/bin"
 APP_NAME="windsurf"
-DESKTOP_FILE="/usr/share/applications/windsurf.desktop"
+DESKTOP_FILE="$HOME/.local/share/applications/windsurf.desktop"
 
 # Function to display log message
 log() {
@@ -34,27 +34,6 @@ success() {
 # Function to display warning message
 warning() {
   echo -e "${YELLOW}[!]${NC} $1"
-}
-
-# Check if running as root and re-execute with sudo
-check_root() {
-  if [ "$EUID" -ne 0 ]; then
-
-    # If being piped, need to save to temp file first
-    if [ ! -t 0 ]; then
-      TEMP_SCRIPT=$(mktemp)
-      cat >"$TEMP_SCRIPT"
-      chmod +x "$TEMP_SCRIPT"
-      echo "Running with sudo. You may be prompted for your password..."
-      exec sudo bash "$TEMP_SCRIPT" "$@"
-    else
-      # Terminal attached, just re-execute with sudo
-      exec sudo "$0" "$@"
-    fi
-
-    error "Failed to obtain root privileges"
-    exit 1
-  fi
 }
 
 # Check for required commands
@@ -269,6 +248,9 @@ create_version_file() {
 create_desktop_integration() {
   log "Creating desktop integration..."
 
+  # Ensure binary directory exists
+  mkdir -p "$BIN_DIR"
+
   # Find icon path
   ICON_PATH="$INSTALL_DIR/resources/app/resources/linux/code.png"
 
@@ -312,6 +294,7 @@ create_desktop_integration() {
 
   ln -s "$INSTALL_DIR/bin/windsurf" "$BIN_DIR/$APP_NAME"
 
+  # Ensure desktop file directory exists
   mkdir -p "$(dirname "$DESKTOP_FILE")"
 
   # Create desktop entry
@@ -332,7 +315,7 @@ EOF
 
   # Update desktop database if available
   if command -v update-desktop-database &>/dev/null; then
-    update-desktop-database
+    update-desktop-database "$HOME/.local/share/applications"
   fi
 
   success "Desktop integration completed"
@@ -385,7 +368,7 @@ uninstall_windsurf() {
 
   # Update desktop database if available
   if command -v update-desktop-database &>/dev/null; then
-    update-desktop-database
+    update-desktop-database "$HOME/.local/share/applications"
   fi
 
   success "Windsurf IDE has been successfully uninstalled!"
@@ -406,7 +389,7 @@ usage() {
 show_one_liner_tip() {
   echo
   echo "TIP: Next time you can install or update using this one-liner:"
-  echo "     curl -fsSL https://fasu.dev/windsurf | sudo bash"
+  echo "     curl -fsSL https://fasu.dev/windsurf | bash"
   echo
 }
 
@@ -431,9 +414,6 @@ main() {
     usage
     ;;
   esac
-
-  # Check for root privileges and re-execute with sudo
-  check_root "$@"
 
   if [ "$MODE" = "uninstall" ]; then
     uninstall_windsurf
