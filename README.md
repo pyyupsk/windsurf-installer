@@ -9,14 +9,13 @@ A simple Bash script to **install**, **update**, or **uninstall** the **Windsurf
 - 🚀 Install or update the **latest version** of Windsurf IDE
 - 🔐 Verifies downloads using **SHA256 checksums**
 - 🖥️ Automatically creates desktop integration (icon + launcher)
-- 📋 Clean and informative logs: success ✅, errors ❌, and warnings ⚠️
+- 📋 Clean and informative logs: success, errors, and warnings
 
 ## 🔧 Requirements
 
 Make sure the following tools are installed before running the script:
 
 - Core utilities: `curl`, `tar`, `grep`, `sed`, `mktemp`, `basename`, `dirname`, `cut`
-- 🔑 **Root privileges** required for install/uninstall
 
 ## 💻 Usage
 
