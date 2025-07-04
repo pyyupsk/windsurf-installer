@@ -111,13 +111,17 @@ check_for_updates() {
       if [ "$CURRENT_VERSION" = "$WINDSURF_VERSION" ]; then
         log "You already have the latest version installed"
 
-        if [ -t 0 ]; then
+        if [ "$FORCE_INSTALL" = "true" ]; then
+          log "Force flag detected, proceeding with reinstall"
+        elif [ -t 0 ] && [ -t 1 ]; then
           read -p "Do you want to reinstall anyway? [y/N] " -n 1 -r
           echo
           if [[ ! $REPLY =~ ^[Yy]$ ]]; then
             log "Installation cancelled"
             exit 0
           fi
+        else
+          log "Latest version already installed, proceeding with reinstall"
         fi
       fi
     else
@@ -381,6 +385,8 @@ usage() {
   echo "Options:"
   echo "  --install    Install/Update Windsurf IDE (default)"
   echo "  --uninstall  Remove Windsurf IDE installation"
+  echo "  --force      Force installation without confirmation"
+  echo "  --quiet      Suppress non-essential output"
   echo "  --help       Display this help message"
   exit 1
 }
@@ -388,48 +394,71 @@ usage() {
 # A recommended one-liner installer message
 show_one_liner_tip() {
   echo
-  echo "TIP: Next time you can install or update using this one-liner:"
+  echo "TIP: Next time you can install or update using these one-liners:"
   echo "     curl -fsSL https://fasu.dev/windsurf | bash"
+  echo "     curl -fsSL https://fasu.dev/windsurf | bash -s -- --force"
+  echo "     curl -fsSL https://fasu.dev/windsurf | bash -s -- --quiet"
   echo
 }
 
 # Main installation flow
 main() {
+  # Initialize variables
+  MODE="install"
+  FORCE_INSTALL=false
+  QUIET_MODE=false
+
   # Parse command line arguments
-  case "$1" in
-  --install)
-    MODE="install"
-    ;;
-  --uninstall)
-    MODE="uninstall"
-    ;;
-  --help)
-    usage
-    ;;
-  "")
-    MODE="install"
-    ;;
-  *)
-    error "Unknown option: $1"
-    usage
-    ;;
-  esac
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+    --install)
+      MODE="install"
+      shift
+      ;;
+    --uninstall)
+      MODE="uninstall"
+      shift
+      ;;
+    --force)
+      FORCE_INSTALL=true
+      shift
+      ;;
+    --quiet)
+      QUIET_MODE=true
+      shift
+      ;;
+    --help)
+      usage
+      ;;
+    "")
+      break
+      ;;
+    *)
+      error "Unknown option: $1"
+      usage
+      ;;
+    esac
+  done
 
   if [ "$MODE" = "uninstall" ]; then
     uninstall_windsurf
   fi
 
-  echo "================================================================="
-  echo "            Windsurf IDE Installer (Latest Version)              "
-  echo "================================================================="
+  if [ "$QUIET_MODE" = "false" ]; then
+    echo "================================================================="
+    echo "            Windsurf IDE Installer (Latest Version)              "
+    echo "================================================================="
+  fi
 
   check_dependencies
   get_latest_info
   check_for_updates
 
   # Ask for confirmation
-  if [ -t 0 ]; then
-    # Interactive terminal available
+  if [ "$FORCE_INSTALL" = "true" ]; then
+    log "Force flag detected, proceeding with installation"
+  elif [ -t 0 ] && [ -t 1 ]; then
+    # Interactive terminal available (both stdin and stdout are terminals)
     read -p "This will ${MODE} Windsurf IDE v$WINDSURF_VERSION to $INSTALL_DIR. Continue? [y/N] " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
@@ -437,8 +466,8 @@ main() {
       exit 0
     fi
   else
-    # Non-interactive, assume yes
-    log "Non-interactive mode detected, assuming yes for confirmation"
+    # Non-interactive or piped, assume yes
+    log "Non-interactive mode detected, proceeding with installation"
   fi
 
   # Declare global variables to store paths
@@ -459,12 +488,14 @@ main() {
   create_desktop_integration
   verify_installation
 
-  # Show one-liner tip if not already using it
-  if [ -t 1 ]; then
+  # Show one-liner tip only in fully interactive mode
+  if [ -t 0 ] && [ -t 1 ] && [ "$QUIET_MODE" = "false" ]; then
     show_one_liner_tip
   fi
 
-  echo "================================================================="
+  if [ "$QUIET_MODE" = "false" ]; then
+    echo "================================================================="
+  fi
 }
 
 # Run the main function with all arguments

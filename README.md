@@ -19,10 +19,32 @@ Make sure the following tools are installed before running the script:
 
 ## 💻 Usage
 
+### Basic Installation
+
 Install Windsurf IDE:
 
 ```bash
 curl -fsSL https://fasu.dev/windsurf | bash
+```
+
+### Advanced Options
+
+Force installation without confirmation prompts:
+
+```bash
+curl -fsSL https://fasu.dev/windsurf | bash -s -- --force
+```
+
+Quiet installation with minimal output:
+
+```bash
+curl -fsSL https://fasu.dev/windsurf | bash -s -- --quiet
+```
+
+Combined force and quiet installation:
+
+```bash
+curl -fsSL https://fasu.dev/windsurf | bash -s -- --force --quiet
 ```
 
 View the [install script](https://fasu.dev/windsurf) for more details.
@@ -43,6 +65,12 @@ To completely remove Windsurf IDE:
 
 ```bash
 curl -fsSL https://fasu.dev/windsurf | bash -s -- --uninstall
+```
+
+Force uninstallation without confirmation:
+
+```bash
+curl -fsSL https://fasu.dev/windsurf | bash -s -- --uninstall --force
 ```
 
 This will delete:
