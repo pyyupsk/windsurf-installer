@@ -18,7 +18,9 @@ DESKTOP_FILE="$HOME/.local/share/applications/windsurf.desktop"
 
 # Function to display log message
 log() {
-  echo -e "${BLUE}[+]${NC} $1"
+  if [ "$QUIET_MODE" != "true" ]; then
+    echo -e "${BLUE}[+]${NC} $1"
+  fi
 }
 
 # Function to display error message
@@ -28,12 +30,16 @@ error() {
 
 # Function to display success message
 success() {
-  echo -e "${GREEN}[✓]${NC} $1"
+  if [ "$QUIET_MODE" != "true" ]; then
+    echo -e "${GREEN}[✓]${NC} $1"
+  fi
 }
 
 # Function to display warning message
 warning() {
-  echo -e "${YELLOW}[!]${NC} $1"
+  if [ "$QUIET_MODE" != "true" ]; then
+    echo -e "${YELLOW}[!]${NC} $1"
+  fi
 }
 
 # Check for required commands
@@ -59,7 +65,16 @@ get_json_value() {
   local json="$1"
   local key="$2"
 
-  echo "$json" | grep -o "\"$key\":[^,}]*" | sed -e 's/^"'"$key"'"://' -e 's/^"//' -e 's/"$//' -e 's/^[ \t]*//' -e 's/[ \t]*$//'
+  # Extract the value and clean it up
+  local value
+  value=$(echo "$json" | grep -o "\"$key\":[^,}]*" | sed -e 's/^"'"$key"'"://' -e 's/^"//' -e 's/"$//' -e 's/^[ \t]*//' -e 's/[ \t]*$//')
+
+  # Return empty string if value is null or empty
+  if [ "$value" = "null" ] || [ -z "$value" ]; then
+    echo ""
+  else
+    echo "$value"
+  fi
 }
 
 # Get the latest version information
@@ -67,7 +82,15 @@ get_latest_info() {
   log "Fetching latest Windsurf IDE version information..."
 
   if ! VERSION_INFO=$(curl -s "$API_URL"); then
-    error "Failed to fetch version information"
+    error "Failed to fetch version information from $API_URL"
+    error "Please check your internet connection and try again"
+    exit 1
+  fi
+
+  # Check if we got valid JSON response
+  if [ -z "$VERSION_INFO" ] || ! echo "$VERSION_INFO" | grep -q '"url"'; then
+    error "Invalid response from API"
+    log "Response: $VERSION_INFO"
     exit 1
   fi
 
@@ -76,6 +99,25 @@ get_latest_info() {
   WINDSURF_VERSION=$(get_json_value "$VERSION_INFO" "productVersion")
   WINDSURF_PACKAGE_VERSION=$(get_json_value "$VERSION_INFO" "windsurfVersion")
   SHA256=$(get_json_value "$VERSION_INFO" "sha256hash")
+
+  # Validate required fields
+  if [ -z "$DOWNLOAD_URL" ]; then
+    error "Failed to parse download URL from version information"
+    log "API Response: $VERSION_INFO"
+    exit 1
+  fi
+
+  if [ -z "$WINDSURF_VERSION" ]; then
+    error "Failed to parse version from version information"
+    log "API Response: $VERSION_INFO"
+    exit 1
+  fi
+
+  if [ -z "$SHA256" ]; then
+    error "Failed to parse SHA256 hash from version information"
+    log "API Response: $VERSION_INFO"
+    exit 1
+  fi
 
   # Clean up any remaining quotes
   DOWNLOAD_URL=$(echo "$DOWNLOAD_URL" | sed 's/^"//;s/"$//')
@@ -138,21 +180,37 @@ download_windsurf() {
   temp_dir=$(mktemp -d)
   local download_file="$temp_dir/windsurf.tar.gz"
 
-  # Download with progress bar and verbose output
-  if ! curl -v -# -L -o "$download_file" "$DOWNLOAD_URL" 2>"$temp_dir/curl.log"; then
+  # Download with appropriate output based on quiet mode
+  local curl_opts=("-L" "-o" "$download_file")
+  if [ "$QUIET_MODE" = "true" ]; then
+    curl_opts+=("-s")
+  else
+    curl_opts+=("-#")
+  fi
+
+  if ! curl "${curl_opts[@]}" "$DOWNLOAD_URL" 2>"$temp_dir/curl.log"; then
     error "Failed to download Windsurf"
-    log "Curl error log:"
-    cat "$temp_dir/curl.log"
+    if [ "$QUIET_MODE" != "true" ]; then
+      log "Curl error log:"
+      cat "$temp_dir/curl.log"
+    fi
     rm -rf "$temp_dir"
     exit 1
   fi
 
-  # Verify checksum if sha256sum is available
-  if command -v sha256sum &>/dev/null; then
-    log "Verifying download integrity..."
-    local computed_sha256
-    computed_sha256=$(openssl dgst -sha256 "$download_file" | awk '{print $2}')
+  # Verify checksum using available tools
+  log "Verifying download integrity..."
+  local computed_sha256=""
 
+  if command -v sha256sum &>/dev/null; then
+    computed_sha256=$(sha256sum "$download_file" | awk '{print $1}')
+  elif command -v openssl &>/dev/null; then
+    computed_sha256=$(openssl dgst -sha256 "$download_file" | awk '{print $2}')
+  else
+    warning "No SHA256 verification tool available, skipping checksum verification"
+  fi
+
+  if [ -n "$computed_sha256" ]; then
     if [ "$computed_sha256" != "$SHA256" ]; then
       error "Checksum verification failed"
       error "Expected: $SHA256"
@@ -160,10 +218,7 @@ download_windsurf() {
       rm -rf "$temp_dir"
       exit 1
     fi
-
     success "Download verified successfully"
-  else
-    warning "sha256sum not available, skipping checksum verification"
   fi
 
   TEMP_DIR="$temp_dir"
@@ -194,8 +249,13 @@ install_windsurf() {
 
   # Extract the archive
   log "Extracting files..."
-  if ! tar -xzf "$download_file" -C "$temp_dir"; then
+  if ! tar -xzf "$download_file" -C "$temp_dir" 2>"$temp_dir/extract.log"; then
     error "Failed to extract archive: $download_file"
+    if [ "$QUIET_MODE" != "true" ]; then
+      log "Extract error log:"
+      cat "$temp_dir/extract.log" 2>/dev/null || true
+    fi
+    rm -rf "$temp_dir"
     exit 1
   fi
 
@@ -224,7 +284,15 @@ install_windsurf() {
   fi
 
   # Copy files to installation directory
-  cp -R "$extracted_dir"/* "$INSTALL_DIR/"
+  if ! cp -R "$extracted_dir"/* "$INSTALL_DIR/" 2>"$temp_dir/copy.log"; then
+    error "Failed to copy files to installation directory"
+    if [ "$QUIET_MODE" != "true" ]; then
+      log "Copy error log:"
+      cat "$temp_dir/copy.log" 2>/dev/null || true
+    fi
+    rm -rf "$temp_dir"
+    exit 1
+  fi
 
   # Set correct permissions
   chmod 755 "$INSTALL_DIR"
